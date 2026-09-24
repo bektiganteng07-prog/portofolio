@@ -77,6 +77,21 @@ const skills = [
 
 export default function Home() {
   const [showIntro, setShowIntro] = useState(true);
+  const emailAddress = "ibrafirmansyahbekti@gmail.com";
+
+  const handleContactSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const subject = `Portfolio contact from ${formData.get("name")}`;
+    const body = `Name: ${formData.get("name")}\nEmail: ${formData.get(
+      "email",
+    )}\n\n${formData.get("message")}`;
+    const composeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+      emailAddress,
+    )}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    window.open(composeUrl, "_blank", "noopener,noreferrer");
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => setShowIntro(false), 1800);
@@ -334,9 +349,7 @@ export default function Home() {
               </p>
 
               <form
-                action="mailto:ibrafirmansyahbekti@gmail.com"
-                method="post"
-                encType="text/plain"
+                onSubmit={handleContactSubmit}
                 className="mt-8 space-y-5 text-left"
               >
                 <div className="grid gap-5 sm:grid-cols-2">
@@ -399,7 +412,9 @@ export default function Home() {
               </p>
               <div className="mt-5 space-y-2 text-sm text-slate-600 dark:text-red-100">
                 <a
-                  href="mailto:ibrafirmansyahbekti@gmail.com"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=ibrafirmansyahbekti%40gmail.com"
+                  target="_blank"
+                  rel="noreferrer"
                   className="flex items-center gap-2 transition hover:text-red-600 dark:hover:text-red-200"
                 >
                   <Mail className="h-4 w-4 text-red-600" />
