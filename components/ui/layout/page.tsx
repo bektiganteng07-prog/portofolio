@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Menu, Moon, Sun, X } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -14,6 +14,7 @@ const navLinks = [
 
 export default function Topbar() {
   const [isDark, setIsDark] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("theme");
@@ -34,7 +35,7 @@ export default function Topbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-red-100 bg-background/80 backdrop-blur-md dark:border-red-200/20">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link href="#home" className="flex items-center gap-3">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-red-700 font-bold text-white shadow-lg shadow-red-500/20">
             BI
@@ -73,13 +74,40 @@ export default function Topbar() {
             )}
             {isDark ? "Light" : "Dark"}
           </button>
-          <Link
-            href="#contact"
-            className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-r from-red-500 via-red-600 to-red-700 px-4 py-1.5 text-sm font-semibold text-white shadow-md shadow-red-500/20 transition hover:brightness-110"
+          <button
+            type="button"
+            aria-label={
+              isMenuOpen ? "Close navigation menu" : "Open navigation menu"
+            }
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen((open) => !open)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-red-200 text-foreground transition hover:bg-red-50 dark:border-red-200/30 dark:hover:bg-white/5 md:hidden"
           >
-            Let&apos;s talk ↗
-          </Link>
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
         </div>
+
+        {isMenuOpen && (
+          <nav
+            aria-label="Mobile navigation"
+            className="absolute right-4 top-full mt-2 w-56 rounded-xl border border-red-100 bg-background p-2 shadow-xl dark:border-red-200/20 sm:right-6 md:hidden lg:right-8"
+          >
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMenuOpen(false)}
+                className="block rounded-lg px-4 py-3 text-sm font-medium text-foreground transition hover:bg-red-50 hover:text-red-600 dark:hover:bg-white/5 dark:hover:text-red-300"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        )}
       </div>
     </header>
   );
