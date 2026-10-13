@@ -1,4 +1,14 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) portfolio project. The project cards on the home page are loaded from the `proyek` table in Supabase.
+
+## Supabase Setup
+
+1. Create a Supabase project and copy `.env.example` to `.env.local`.
+2. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` in `.env.local` using the project URL and publishable key from Supabase. The app also accepts the legacy `NEXT_PUBLIC_SUPABASE_ANON_KEY` variable. Never use a secret or service-role key in a browser app.
+3. Open Supabase **SQL Editor**, paste in [`supabase/setup.sql`](supabase/setup.sql), and run it. It creates the `proyek` table, enables RLS, grants public read access, and inserts three sample projects. Running it again will not duplicate those sample titles.
+
+The table columns are `id`, `title`, `description`, `stack`, `href`, `image_url`, and `image_alt`. `stack` is a Postgres text array. The sample image URLs are empty; add public image URLs in the Table Editor if you want project thumbnails.
+
+`.env.local` is ignored by Git. `.env.example` contains placeholders only and can be committed. Restart the Next.js development server after changing environment variables.
 
 ## Getting Started
 
