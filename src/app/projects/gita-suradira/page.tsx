@@ -9,12 +9,12 @@ export default function GitaSuradiraPage() {
   const router = useRouter();
 
   return (
-    <main className="min-h-screen bg-[#fff7f7] px-4 py-10 text-slate-900 sm:px-6 lg:px-8 dark:bg-[#4b0d0d] dark:text-white">
+    <main className="min-h-screen bg-[#fff7f7] px-4 py-10 text-red-600 sm:px-6 lg:px-8 dark:bg-[#4b0d0d] dark:text-white">
       <div className="mx-auto max-w-4xl">
         <button
           type="button"
           onClick={() => router.back()}
-          className="inline-flex items-center gap-2 text-sm font-semibold text-red-600 transition hover:text-red-800 dark:text-red-200 dark:hover:text-white"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-red-600 transition hover:text-red-500 dark:text-red-200 dark:hover:text-white"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to projects
@@ -27,7 +27,7 @@ export default function GitaSuradiraPage() {
           <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-6xl">
             Web Gita Suradira
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-600 dark:text-red-100">
+          <p className="mt-5 max-w-2xl text-lg leading-8 text-red-600 dark:text-red-100">
             A personal website designed to present information in a simple and
             engaging way.
           </p>
@@ -42,7 +42,7 @@ export default function GitaSuradiraPage() {
             />
           </div>
 
-          <p className="mt-6 max-w-3xl text-base leading-8 text-slate-600 dark:text-red-100">
+          <p className="mt-6 max-w-3xl text-base leading-8 text-red-600 dark:text-red-100">
             Web Gita Suradira is a personal website project created to present
             information in a clean, friendly, and easy-to-understand way. The
             design focuses on a simple layout and a comfortable browsing
@@ -53,7 +53,7 @@ export default function GitaSuradiraPage() {
             {["HTML", "CSS", "JavaScript"].map((item) => (
               <span
                 key={item}
-                className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm text-red-700 dark:border-red-200/20 dark:bg-white/10 dark:text-red-50"
+                className="rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm text-red-600 dark:border-red-200/20 dark:bg-white/10 dark:text-red-50"
               >
                 {item}
               </span>
