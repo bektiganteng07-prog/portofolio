@@ -11,14 +11,39 @@ create table if not exists public.proyek (
 alter table public.proyek enable row level security;
 
 drop policy if exists "Public can read projects" on public.proyek;
+drop policy if exists "Projects are readable by everyone" on public.proyek;
+drop policy if exists "Authenticated can insert projects" on public.proyek;
+drop policy if exists "Authenticated can update projects" on public.proyek;
+drop policy if exists "Authenticated can delete projects" on public.proyek;
 
-create policy "Public can read projects"
+create policy "Projects are readable by everyone"
 on public.proyek
 for select
-to anon
+to anon, authenticated
 using (true);
 
-grant select on table public.proyek to anon;
+create policy "Authenticated can insert projects"
+on public.proyek
+for insert
+to authenticated
+with check (true);
+
+create policy "Authenticated can update projects"
+on public.proyek
+for update
+to authenticated
+using (true)
+with check (true);
+
+create policy "Authenticated can delete projects"
+on public.proyek
+for delete
+to authenticated
+using (true);
+
+grant select on table public.proyek to anon, authenticated;
+grant insert, update, delete on table public.proyek to authenticated;
+grant usage, select on sequence public.proyek_id_seq to authenticated;
 
 insert into public.proyek (title, description, stack, href, image_url, image_alt)
 select sample.title, sample.description, sample.stack, sample.href, sample.image_url, sample.image_alt
