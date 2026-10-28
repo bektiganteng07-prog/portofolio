@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { ArrowUpRight, Pencil, Plus, Trash2 } from "lucide-react";
 import { getAuthenticatedAdmin } from "@/lib/admin-auth";
+import { getSupabasePublicClient } from "@/lib/supabase";
 import { createProjectAction } from "@/app/admin/actions";
 
 type ProjectsPageProps = PageProps<"/admin/proyek">;
@@ -15,15 +16,47 @@ export default async function AdminProjectsPage({
   const admin = await getAuthenticatedAdmin();
   if (!admin) redirect("/admin/login");
 
+  const publicSupabase = getSupabasePublicClient();
+  if (!publicSupabase) {
+    return (
+      <section className="max-w-3xl">
+        <h1 className="text-3xl font-black">Proyek</h1>
+        <p
+          role="alert"
+          className="mt-6 border border-red-300 bg-red-50 px-4 py-4 text-sm text-red-900"
+        >
+          Konfigurasi Supabase belum lengkap. Periksa URL dan publishable key.
+        </p>
+      </section>
+    );
+  }
+
   const [{ data, error }, query] = await Promise.all([
-    admin.supabase
+    publicSupabase
       .from("proyek")
       .select("id, title, description, stack, href")
       .order("id", { ascending: true }),
     searchParams,
   ]);
 
-  if (error) notFound();
+  if (error) {
+    return (
+      <section className="max-w-3xl">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-red-700 dark:text-red-300">
+          Pengelolaan konten
+        </p>
+        <h1 className="mt-2 text-3xl font-black">Proyek</h1>
+        <p
+          role="alert"
+          className="mt-6 border border-red-300 bg-red-50 px-4 py-4 text-sm leading-6 text-red-900 dark:border-red-900 dark:bg-red-950 dark:text-red-100"
+        >
+          Data proyek tidak bisa dibaca. Pastikan tabel{" "}
+          <code>public.proyek</code>, policy SELECT untuk role <code>anon</code>
+          , dan konfigurasi aplikasi mengarah ke project Supabase yang sama.
+        </p>
+      </section>
+    );
+  }
 
   const statusMessage =
     query.status === "created"
@@ -128,7 +161,7 @@ export default async function AdminProjectsPage({
                     colSpan={4}
                     className="px-4 py-10 text-center text-[#755454] dark:text-red-100/70"
                   >
-                    Belum ada proyek. Tambahkan melalui formulir di bawah.
+                    Belum ada data di tabel proyek pada project Supabase ini.
                   </td>
                 </tr>
               )}

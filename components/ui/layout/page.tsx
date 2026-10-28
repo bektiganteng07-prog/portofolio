@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Menu, Moon, PanelsTopLeft, Sun, X } from "lucide-react";
+import { Menu, Moon, Sun, X } from "lucide-react";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -60,13 +60,6 @@ export default function Topbar() {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/admin/login"
-            className="inline-flex items-center gap-2 rounded-md bg-red-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-800"
-          >
-            <PanelsTopLeft className="size-4" />
-            Admin
-          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -113,14 +106,6 @@ export default function Topbar() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/admin/login"
-              onClick={() => setIsMenuOpen(false)}
-              className="mt-1 flex items-center gap-2 rounded-lg bg-red-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-800"
-            >
-              <PanelsTopLeft className="size-4" />
-              Admin
-            </Link>
           </nav>
         )}
       </div>
