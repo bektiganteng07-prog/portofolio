@@ -102,7 +102,9 @@ export default async function AdminProjectsPage({
         >
           {query.error === "invalid"
             ? "Periksa kembali semua isian proyek."
-            : "Proyek gagal disimpan. Periksa policy Supabase."}
+            : query.error === "42501"
+              ? "Supabase menolak perubahan (42501). Jalankan supabase/setup.sql pada project Supabase yang digunakan aplikasi."
+              : `Proyek gagal disimpan (kode ${query.error}). Periksa policy Supabase.`}
         </p>
       )}
 

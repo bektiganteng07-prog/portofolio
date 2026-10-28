@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { ArrowLeft, Save } from "lucide-react";
 import { getAuthenticatedAdmin } from "@/lib/admin-auth";
+import { getSupabasePublicClient } from "@/lib/supabase";
 import { updateProjectAction } from "@/app/admin/actions";
 
 type EditProjectPageProps = PageProps<"/admin/proyek/edit/[id]">;
@@ -19,7 +20,10 @@ export default async function EditProjectPage({
   const [{ id }, query] = await Promise.all([params, searchParams]);
   if (!/^\d+$/.test(id)) notFound();
 
-  const { data: project, error } = await admin.supabase
+  const publicSupabase = getSupabasePublicClient();
+  if (!publicSupabase) notFound();
+
+  const { data: project, error } = await publicSupabase
     .from("proyek")
     .select("id, title, description, stack, href, image_url, image_alt")
     .eq("id", Number(id))
@@ -50,7 +54,9 @@ export default async function EditProjectPage({
         >
           {query.error === "invalid"
             ? "Periksa kembali isian proyek."
-            : "Perubahan gagal disimpan. Periksa policy Supabase."}
+            : query.error === "42501"
+              ? "Supabase menolak perubahan (42501). Jalankan supabase/setup.sql pada project Supabase yang digunakan aplikasi."
+              : `Perubahan gagal disimpan (kode ${query.error}). Periksa policy UPDATE Supabase.`}
         </p>
       )}
 

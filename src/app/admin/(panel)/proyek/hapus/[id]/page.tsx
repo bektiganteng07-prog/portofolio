@@ -47,7 +47,9 @@ export default async function DeleteProjectPage({
             role="alert"
             className="mt-5 border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-900 dark:border-red-900 dark:bg-red-950 dark:text-red-100"
           >
-            Penghapusan gagal. Periksa policy DELETE Supabase.
+            {query.error === "42501"
+              ? "Supabase menolak penghapusan (42501). Jalankan supabase/setup.sql pada project Supabase yang digunakan aplikasi."
+              : `Penghapusan gagal (kode ${query.error}). Periksa policy DELETE Supabase.`}
           </p>
         )}
 

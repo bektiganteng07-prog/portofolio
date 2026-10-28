@@ -71,7 +71,7 @@ export async function createProjectAction(formData: FormData) {
   if (!project) redirectWithError("/admin/proyek", "invalid");
 
   const { error } = await admin.supabase.from("proyek").insert(project);
-  if (error) redirectWithError("/admin/proyek", "save");
+  if (error) redirectWithError("/admin/proyek", error.code || "save");
 
   revalidatePath("/");
   revalidatePath("/admin/proyek");
@@ -91,14 +91,13 @@ export async function updateProjectAction(formData: FormData) {
     );
   }
 
-  const { data, error } = await admin.supabase
+  const { error } = await admin.supabase
     .from("proyek")
     .update(project)
-    .eq("id", Number(id))
-    .select("id");
+    .eq("id", Number(id));
 
-  if (error || !data?.length) {
-    redirectWithError(`/admin/proyek/edit/${id}`, "save");
+  if (error) {
+    redirectWithError(`/admin/proyek/edit/${id}`, error.code || "save");
   }
 
   revalidatePath("/");
@@ -113,14 +112,13 @@ export async function deleteProjectAction(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   if (!/^\d+$/.test(id)) redirect("/admin/proyek");
 
-  const { data, error } = await admin.supabase
+  const { error } = await admin.supabase
     .from("proyek")
     .delete()
-    .eq("id", Number(id))
-    .select("id");
+    .eq("id", Number(id));
 
-  if (error || !data?.length) {
-    redirectWithError(`/admin/proyek/hapus/${id}`, "delete");
+  if (error) {
+    redirectWithError(`/admin/proyek/hapus/${id}`, error.code || "delete");
   }
 
   revalidatePath("/");
